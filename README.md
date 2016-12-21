@@ -6,3 +6,5 @@
 ```
 python pprint_json.py -f data.json
 ```
+
+В параметре -f необходимо указать путь к файлу
