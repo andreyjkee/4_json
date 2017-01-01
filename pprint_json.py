@@ -1,4 +1,5 @@
 import json
+import os
 from json.decoder import JSONDecodeError
 from optparse import OptionParser
 
@@ -6,14 +7,13 @@ from optparse import OptionParser
 def load_data(filepath):
     if not filepath:
         raise Exception('Не указан путь к файлу')
-    try:
-        with open(filepath.strip(), 'r', encoding='utf-8') as f:
-            try:
-                return json.loads(f.read())
-            except JSONDecodeError:
-                print('Файл ', filepath, ' содержит отличную от JSON структуру')
-    except FileNotFoundError:
-        print('Файл : ', filepath, 'не найден')
+    if not os.path.exists(filepath):
+        raise FileNotFoundError({'message': 'Файл {0} не найден'.format(filepath)})
+    with open(filepath.strip(), 'r', encoding='utf-8') as f:
+        try:
+            return json.loads(f.read())
+        except JSONDecodeError:
+            print('Файл {0} содержит отличную от JSON структуру'.format(filepath))
 
 def pretty_print_json(data):
     print(json.dumps(sort_keys=True, indent=4, obj=data))
